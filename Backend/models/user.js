@@ -38,18 +38,19 @@ userSchema.methods.comparePassword = async function (password) {
       return result;
     } catch (error) {
       console.log('Error while comparing password!', error.message);
+      return error;
     }
   };
 
-userSchema.pre('save', function (next) {
+/*
+userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
-      bcrypt.hash(this.password, 8, (err, hash) => {
-        if (err) return next(err);
-  
-        this.password = hash;
-        next();
-      });
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(this.password, salt)
+      this.password = hashedPassword;
+      next()
     }
   });
+*/
 
 module.exports = mongoose.model("User", userSchema)
