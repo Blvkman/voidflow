@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 const redis_client = require("./redis")
 
 const mailRe = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const passRe = /^\$2[ayb]\$.{56}$/; // bCrypt hash
+//const passRe = /^\$2[ayb]\$.{56}$/; // bCrypt hash
+const passRe = /^[a-f0-9]{64}$/;
 const nameRe = /^(?!-)[a-zA-Z-]*[a-zA-Z]{2,29}$/ //trattini in mezzo al nome, lettere, massimo di 20 caratteri
 const phoneRe = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
 
@@ -44,6 +45,23 @@ function validateData(req, res, next) {
     if(req.body.phone != undefined){
         if(!phoneRe.test(String(req.body.phone))){
             return res.status(400).json({status:false, message: "Invalid Phone Number"})
+        }
+    }
+    next()
+}
+
+async function verifyPassword(req, res, next) {
+    if(req.body.password != undefined){
+        if(!passRe.test(String(req.body.password))){
+            return res.status(400).json({status:false, message: "Invalid current password"})
+        }
+    }if(req.body.newPassword != undefined){
+        if(!passRe.test(String(req.body.newPassword))){
+            return res.status(400).json({status:false, message: "Invalid newPassword password"})
+        }
+    }if(req.body.passwordVerify != undefined){
+        if(!passRe.test(String(req.body.passwordVerify))){
+            return res.status(400).json({status:false, message: "Invalid passwordVerify password"})
         }
     }
     next()
@@ -131,6 +149,27 @@ function generateRefreshToken(id){
     return refreshToken;
 }
 
+function authenticateResetToken(req, res, next) {
+    const resetToken = req.query.resetToken;
+    if(resetToken == null) return res.sendStatus(401);
+
+    jwt.verify(resetToken, process.env.RESET_TOKEN, (err, data) => {
+        if (err) {
+            return res.status(403).json({status:false,message:err.message});
+        }
+        req.data = data;
+        next()
+    })
+}
+
+function checkVerified(req, res, next) {
+    if(res.user.mailToken != "verified"){
+        res.status(400).json({status:false, message:"Verify your email first."})
+    } else {
+        next();
+    }
+}
+
 module.exports = {
     getUserParams,
     validateData,
@@ -138,5 +177,8 @@ module.exports = {
     authenticateRefreshToken,
     generateRefreshToken,
     getUserBody,
-    getUserToken
+    getUserToken,
+    verifyPassword,
+    authenticateResetToken,
+    checkVerified
 }

@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
 
 //Ritorna i dati dell'utente per mail
 router.get("/dashboard", authenticateAccessToken, getUserToken, (req, res) => {
+    //res.user.resetCode = "";
     res.json(res.user)
 })
 

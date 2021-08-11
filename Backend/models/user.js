@@ -5,7 +5,21 @@ const userSchema = new mongoose.Schema({
     mail: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim: true,
+        lowercase: true
+    },
+    mailToken:{
+      type: String,
+      required: true
+    },
+    resetToken:{
+      type: String,
+      required: false
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
     },
     password: {
         type: String,
@@ -13,20 +27,27 @@ const userSchema = new mongoose.Schema({
     },
     name: {
         type: String,
+        trim: true,
         required: true
     },
     surname: {
         type: String,
+        trim: true,
         required: true
     },
     phone: {
         type: String,
+        trim: true,
         required: false,
-        default: "xxxxxxxxxx"
+        default: ""
     },
     active_services: {
         type: String,
         required: false
+    },
+    date: {
+      type: Date,
+      default: Date.now()
     }
 })
 
@@ -42,7 +63,7 @@ userSchema.methods.comparePassword = async function (password) {
     }
   };
 
-/*
+
 userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
       const salt = await bcrypt.genSalt();
@@ -51,6 +72,6 @@ userSchema.pre('save', async function (next) {
       next()
     }
   });
-*/
+
 
 module.exports = mongoose.model("User", userSchema)
