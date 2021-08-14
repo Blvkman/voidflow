@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devstart": "nodemon server.js"
+    "devstart": "nodemon server.js",
+    "fullStart": "concurrently \"npm run devstart\" \"cd ../Frontend && npm run start\" "
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "concurrently": "^6.2.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
