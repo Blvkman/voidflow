@@ -38,6 +38,18 @@ export const NavLogo = styled(LinkR)`
     margin-left: 24px;
     font-weight: bold;
     text-decoration: none;
+
+    &:hover {
+        transform: scale(1.2);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    &{
+        transform: scale(1.0);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
 `
 
 export const MobileIcon = styled.div`
@@ -82,6 +94,17 @@ export const NavLinks = styled(LinkS)`
 
     &.active {
         border-bottom: 3px solid #29BCE0;
+    }
+    &:hover {
+        transform: scale(1.1);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    & {
+        transform: scale(1.0);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
     }
 `
 
