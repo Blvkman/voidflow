@@ -4,7 +4,7 @@ const redis_client = require("./redis")
 
 const mailRe = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 //const passRe = /^\$2[ayb]\$.{56}$/; // bCrypt hash
-const passRe = /^[a-f0-9]{64}$/;
+const passRe = /^[a-f0-9]{128}$/;
 const nameRe = /^(?!-)[a-zA-Z-]*[a-zA-Z]{2,29}$/ //trattini in mezzo al nome, lettere, massimo di 20 caratteri
 const phoneRe = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
 

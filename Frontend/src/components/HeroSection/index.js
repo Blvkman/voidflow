@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import desktopVideo from '../../video/desktopVideo.mp4'
 import tabletVideo from '../../video/tabletVideo.mp4'
 import mobileVideo from '../../video/mobileVideo.mp4'
-import { Button } from '../ButtonElement'
+import { Button } from '../ButtonRouterElements'
 import { HeroContainer,
     HeroBg,
     VideoBg,
@@ -38,7 +38,7 @@ const HeroSection = () => {
                     Grazie al nostro team potrai godere di servizi vantaggiosi e di qualità.
                 </HeroP>
                 <HeroBtnWrapper>
-                    <Button to="servizi" 
+                    <Button to="signin" 
                     onMouseEnter={onHover} 
                     onMouseLeave={onHover}
                     smooth={true} duration={500} spy={true}
