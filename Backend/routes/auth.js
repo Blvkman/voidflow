@@ -193,7 +193,7 @@ router.post("/register", validateData, async (req, res) => {
             }
         })
         newuser.mailToken = "";
-        res.status(201).json({status:true,newuser}).send
+        res.status(200).json({status:true,newuser}).send
     } catch (err) {
         res.status(400).json({status:false, message:err.message}).send
     }

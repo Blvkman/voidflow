@@ -19,7 +19,16 @@ export default class Register extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {flag : 0, error : ''};
+        this.state = {
+            flag : 0,
+            error : '',
+            name: '',
+            surname: '',
+            phone: '',
+            confirmPassword: '',
+            mail: '',
+            password: ''
+        };
       }
 
     render(){
@@ -39,37 +48,38 @@ export default class Register extends Component {
 
         const passRe = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
 
-        let json={}, name="", surname="", phone="", confirmPassword="", mail="", password="";
+        let json={};
 
         const endSubmit = async () => {
             try{
-                if(!passRe.test(password)){
+                if(!passRe.test(this.state.password)){
                     this.setState({flag:1, error:"Password has to have: One upper case letter, One lower case letter, at least One number, at least One special character, minimum 8 in Length."})
                 } else {
-                    if( password === confirmPassword ){
+                    if( this.state.password === this.state.confirmPassword ){
 
-                        if(password !== "" && confirmPassword !== "" && mail !== "" && name !== "" && surname !== ""){
-                            const hashedPassword = await crypto.createHash('sha512').update(password).digest('hex');
-                            if(phone === ""){
+                        if(this.state.password !== "" && this.state.confirmPassword !== "" && this.state.mail !== "" && this.state.name !== "" && this.state.surname !== ""){
+                            const hashedPassword = await crypto.createHash('sha512').update(this.state.password).digest('hex');
+                            if(this.state.phone === ""){
                                 json = {
-                                    mail: mail,
+                                    mail: this.state.mail,
                                     password: hashedPassword,
-                                    name: name,
-                                    surname: surname
+                                    name: this.state.name,
+                                    surname: this.state.surname
                                 }
                             } else {
                                 json = {
-                                    mail: mail,
+                                    mail: this.state.mail,
                                     password: hashedPassword,
-                                    phone: phone,
-                                    name: name,
-                                    surname: surname
+                                    phone: this.state.phone,
+                                    name: this.state.name,
+                                    surname: this.state.surname
                                 }
                             }
                             axios.post(`${apiUrl}/register`, json)
                             .then((response) => {
                                 if(response.status === 200){
-                                    this.setState({error : 'Registration done. Confirm your mail and Log in.'});
+                                    console.log("registrato con successo")
+                                    this.setState({error : <>Registration done. Confirm your mail and <span onClick={() => { window.location.href="/signin" }}>Log in</span>.</>});
                                 }
                             }, (error) => {
                                 if(error.response !== undefined){
@@ -105,19 +115,19 @@ export default class Register extends Component {
                                 <table>
                                 <th>
                                 <FormLabel htmlFor='for'>Name *</FormLabel>
-                                <FormInput type='name' placeholder='Mario' onChange={e=>name = (e.target.value)} required/>
+                                <FormInput type='name' placeholder='Mario' onChange={e=>this.setState({ name: e.target.value})} required/>
                                 <FormLabel htmlFor='for'>Surname *</FormLabel>
-                                <FormInput type='surname' placeholder='Rossi' onChange={e=>surname = (e.target.value)} required/>
+                                <FormInput type='surname' placeholder='Rossi' onChange={e=>this.setState({ surname: e.target.value})} required/>
                                 <FormLabel htmlFor='for'>Phone</FormLabel>
-                                <FormInput type='phone' placeholder='**********' onChange={e=>phone = (e.target.value)} required/>
+                                <FormInput type='phone' placeholder='**********' onChange={e=>this.setState({ phone: e.target.value})} required/>
                                 </th>
                                 <th>
                                 <FormLabel htmlFor='for'>Email *</FormLabel>
-                                <FormInput type='email' placeholder='example@void.it' onChange={e=>mail = (e.target.value)} required/>
+                                <FormInput type='email' placeholder='example@void.it' onChange={e=>this.setState({ mail: e.target.value})} required/>
                                 <FormLabel htmlFor='for'>Password *</FormLabel>
-                                <FormInput type='password' placeholder='********' onChange={e=>password = (e.target.value)} required/>
+                                <FormInput type='password' placeholder='********' onChange={e=>this.setState({ password: e.target.value})} required/>
                                 <FormLabel htmlFor='for'>Confirm Password *</FormLabel>
-                                <FormInput type='password' placeholder='********' onChange={e=>confirmPassword = (e.target.value)} required/>
+                                <FormInput type='password' placeholder='********' onChange={e=>this.setState({ confirmPassword: e.target.value})} required/>
                                 </th>
                                 </table>
                                 <FormButton type='button' onClick={endSubmit}>Continue</FormButton>
