@@ -38,7 +38,7 @@ const HeroSection = () => {
                     Grazie al nostro team potrai godere di servizi vantaggiosi e di qualità.
                 </HeroP>
                 <HeroBtnWrapper>
-                    <Button to="signin" 
+                    <Button to="register" 
                     onMouseEnter={onHover} 
                     onMouseLeave={onHover}
                     smooth={true} duration={500} spy={true}

@@ -136,3 +136,28 @@ export const NavBtnLink = styled(LinkR)`
         color: #010606;
     }
 `
+
+export const NavItemBtn = styled(LinkR)`
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+
+    &.active {
+        border-bottom: 3px solid #29BCE0;
+    }
+    &:hover {
+        transform: scale(1.1);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    & {
+        transform: scale(1.0);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+`

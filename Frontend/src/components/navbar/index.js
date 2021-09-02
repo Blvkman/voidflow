@@ -9,7 +9,8 @@ import { Nav,
     NavItem, 
     NavLinks,
     NavBtn,
-    NavBtnLink } from './NavbarElements'
+    NavBtnLink,
+    NavItemBtn } from './NavbarElements'
 
 const Navbar = ({toggle}) => {
     const [scrollNav, setScrollNav] = useState(false);
@@ -64,12 +65,12 @@ const Navbar = ({toggle}) => {
                             >About</NavLinks>
                         </NavItem>
                         <NavItem>
-                            <NavLinks to="signup">Sign Up</NavLinks>
+                            <NavItemBtn to='/register'>Sign Up</NavItemBtn>
                         </NavItem>
                     </NavMenu>
                     <NavBtn>
                             <NavBtnLink to='/signin'>Sign In</NavBtnLink>
-                        </NavBtn>
+                    </NavBtn>
                 </NavbarContainer>
             </Nav>
         </>

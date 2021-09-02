@@ -13,7 +13,7 @@ const {validateData, getUserBody, authenticateAccessToken, authenticateRefreshTo
 router.post("/login", getUserBody, async (req, res) => {
     try{
         if(res.user.mailToken != "verified"){
-            res.status(400).json({status:false,message:"Confirm your email before logging in."}).send;
+            res.status(301).json({status:false,message:"Confirm your email before logging in."}).send;
         }
         else{
             const value = await res.user.comparePassword(req.body.password);
