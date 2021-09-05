@@ -105,9 +105,9 @@ router.get("/verify-email", async (req, res) => {
         user.mailToken = "verified";
         user.isVerified = true;
         await user.save();
-        res.redirect('/login');
+        res.redirect('http://localhost:5000/signin');
     }else{
-        res.redirect('/register');
+        res.redirect('http://localhost:5000/register');
     }
 })
 

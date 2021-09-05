@@ -22,8 +22,8 @@ export default class App extends Component {
   }
   
   successfulLogin(data) {
-    window.localStorage.setItem("accessToken", data.accessToken);
-    window.localStorage.setItem("refreshToken", data.refreshToken);
+    window.localStorage.setItem("voidFlowAccessToken", data.token.accessToken);
+    window.localStorage.setItem("voidFlowRefreshToken", data.token.refreshToken);
     this.setState({ 
       loggedInStatus: "LOGGED_IN_SUCCESSFULLY"
     })

@@ -36,6 +36,7 @@ export default class SignIn extends Component {
                     password: hashedPassword
                 })
                 .then((response) => {
+
                     if(response.status === 200){
                         this.setState({error : ''});
                         this.props.successfulLogin(response.data);
@@ -86,7 +87,6 @@ export default class SignIn extends Component {
         return (
             <>
                 <Container>
-                    <h1>{this.props.loggedInStatus}</h1>
                     <FormWrap>
                         <Icon to="/">VoidFlow</Icon>
                         <FormContent>
