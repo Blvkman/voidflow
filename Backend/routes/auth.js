@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
+const {sendMail} = require("../utils/mailer");
 const User = require("../models/user");
 const redis_client = require("../utils/redis")
 const {validateData, getUserBody, authenticateAccessToken, authenticateRefreshToken, generateRefreshToken, getUserToken, verifyPassword, authenticateResetToken, checkVerified} = require("../utils/middlewares");
@@ -88,15 +88,6 @@ router.get("/check", authenticateAccessToken, (req, res) => {
     res.send({status:true, tokenData:req.data})
 })
 
-//Mailer
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'voidflowit@gmail.com',
-        pass: process.env.MAIL_PASS
-    }
-})
-
 //Verifica email
 router.get("/verify-email", async (req, res) => {
     const token = req.query.token;
@@ -120,20 +111,13 @@ router.post("/reset", getUserBody, checkVerified, async (req, res) => {
     res.user.resetToken = resetToken;
     try{
         const newuser = await res.user.save();
-        var mailOptions = {
-            from: ` "Reset Password" <voidflowit@gmail.com> `,
-            to: res.user.mail,
-            subject: `Voidflow - reset your password`,
-            html: `<h2>${newuser.name}, here's your reset password mail!</h2>
-                    <h4>To reset your password, please click <a href="http://${req.headers.host}/reset?resetToken=${resetToken}">here</a>.</h4>`
-        }
+        sendMail(res.user.mail,
+            `Voidflow - reset your password`,
+            `<h2>${newuser.name}, here's your reset password mail!</h2>
+            <h4>To reset your password, please click <a href="http://localhost:5000/reset?resetToken=${resetToken}">here</a>.</h4>`
+            );
 
-        transporter.sendMail(mailOptions, (err, info) => {
-            if(err) res.status(500).json({message:err})
-            else{
-                console.log("Log Mail: reset mail sent to " + user.mail)
-            }
-        })
+        
         res.status(201).json({status:true,message:"Reset mail sent."}).send
     } catch (err) {
         res.status(500).json({status:false,message:err.message})
@@ -143,24 +127,21 @@ router.post("/reset", getUserBody, checkVerified, async (req, res) => {
 
 //End Reset password
 router.post("/resetFinal", authenticateResetToken, verifyPassword, async (req, res) => {
-
-    if(req.body.newPassword != req.body.passwordVerify){
-        res.status(400).json({status:false,message:"The paswords are not equal."})
-    } else {
-        try{
-            const user = await User.findOne({resetToken:req.query.resetToken});
-            if(user){
-                user.resetToken = "";
-                user.password = req.body.newPassword;
-                await user.save();
-                res.status(200).json({status:true,message:"Password reset done."})
-            }else{
-                res.status(400).json({status:false,message:"User not found."})
-            }
-        } catch (err) {
-            res.status(500).json({status:false,message:err.message})
+ 
+    try{
+        const user = await User.findOne({resetToken:req.query.resetToken});
+        if(user){
+            user.resetToken = "";
+            user.password = req.body.newPassword;
+            await user.save();
+            res.status(200).json({status:true,message:"Password reset done."})
+        }else{
+            res.status(400).json({status:false,message:"User not found."})
         }
+    } catch (err) {
+        res.status(500).json({status:false,message:err.message})
     }
+    
 })
 
 
@@ -178,20 +159,12 @@ router.post("/register", validateData, async (req, res) => {
     })
     try {
         const newuser = await user.save();
-        var mailOptions = {
-            from: ` "Verify your email" <voidflowit@gmail.com> `,
-            to: req.body.mail,
-            subject: `Voidflow - verify your email`,
-            html: `<h2>${user.name}, thanks for registering to our site!</h2>
-                    <h4>To complete your registration, please click <a href="http://${req.headers.host}/verify-email?token=${newuser.mailToken}">here</a>.</h4>`
-        }
-
-        transporter.sendMail(mailOptions, (err, info) => {
-            if(err) console.log(err)
-            else{
-                console.log("Log Mail: confirmation mail sent to " + user.mail)
-            }
-        })
+        sendMail(req.body.mail,
+            `Voidflow - verify your email`,
+            `<h2>${user.name}, thanks for registering to our site!</h2>
+            <h4>To complete your registration, please click <a href="http://${req.headers.host}/verify-email?token=${newuser.mailToken}">here</a>.</h4>`
+            );
+            
         newuser.mailToken = "";
         res.status(200).json({status:true,newuser}).send
     } catch (err) {

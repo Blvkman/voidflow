@@ -11,7 +11,8 @@ import { Container,
     FormH1, FormWrap, 
     FormButton, 
     FormInput, 
-    FormLabel } from './SigninElements';
+    FormLabel,
+    LinkText } from './SigninElements';
 
 
 export default class SignIn extends Component {
@@ -97,7 +98,7 @@ export default class SignIn extends Component {
                                 <FormLabel htmlFor='for'>Password</FormLabel>
                                 <FormInput type='password' placeholder='********' onChange={e=>this.setState({ password: e.target.value })} required/>
                                 <FormButton type='button' onClick={() => this.endSubmit()}>Continue</FormButton>
-                                <Text>Forgot Password</Text>
+                                <LinkText to='/reset'>Forgot Password</LinkText>
                                 <Text>{this.state.error}</Text>
                             </Form>
                         </FormContent>

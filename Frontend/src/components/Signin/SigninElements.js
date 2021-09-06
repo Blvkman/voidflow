@@ -103,3 +103,11 @@ export const Text = styled.span`
     color: #fff;
     font-size: 14px;
 `
+
+export const LinkText = styled(Link)`
+    text-align: center;
+    margin-top: 24px;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+`

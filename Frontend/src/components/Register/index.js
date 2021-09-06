@@ -55,7 +55,7 @@ export default class Register extends Component {
                 if(!passRe.test(this.state.password)){
                     this.setState({flag:1, error:"Password has to have: One upper case letter, One lower case letter, at least One number, at least One special character, minimum 8 in Length."})
                 } else {
-                    if( this.state.password === this.state.confirmPassword ){
+                    if(this.state.password === this.state.confirmPassword){
 
                         if(this.state.password !== "" && this.state.confirmPassword !== "" && this.state.mail !== "" && this.state.name !== "" && this.state.surname !== ""){
                             const hashedPassword = await crypto.createHash('sha512').update(this.state.password).digest('hex');
@@ -85,7 +85,7 @@ export default class Register extends Component {
                                 if(error.response !== undefined){
                                     if (error.response.status === 400 && error.response.data.message.includes("duplicate key error")){
                                         //La mail non è registrata, Registrati prima "Alert"
-                                        this.setState({flag:1, error:"This email is registered. Login to your account."})
+                                        this.setState({flag:1, error:"Questa mail è già registrata. Fai il Login ."})
                                     } else {
                                         this.setState({flag:1, error:error.response.data.message})
                                     }
@@ -96,7 +96,7 @@ export default class Register extends Component {
                             this.setState({flag:1, error:"Inserisci i dati richiesti (*)"})
                         }
                     } else {
-                        this.setState({flag:1, error:"Passwords are not the same."})
+                        this.setState({flag:1, error:"Le password non coincidono."})
                     }
                 }
             } catch (err) {

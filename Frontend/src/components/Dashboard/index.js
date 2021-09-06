@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import { Redirect } from 'react-router-dom'
 import {apiUrl} from '../../variables';
 import axios from 'axios';
 

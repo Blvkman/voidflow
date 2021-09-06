@@ -5,6 +5,7 @@ import Home from './pages';
 import SigninPage from './pages/signin';
 import RegisterPage from './pages/register';
 import DashboardPage from './pages/dashboard';
+import ResetPage from './pages/reset';
 
 
 export default class App extends Component {
@@ -39,6 +40,14 @@ export default class App extends Component {
           exact
           render={props => (
             <RegisterPage 
+            {...props}/>
+          )}
+          />
+
+          <Route path="/reset"
+          exact
+          render={props => (
+            <ResetPage 
             {...props}/>
           )}
           />
