@@ -96,33 +96,54 @@ router.get("/verify-email", async (req, res) => {
         user.mailToken = "verified";
         user.isVerified = true;
         await user.save();
-        res.redirect('http://localhost:5000/signin');
+        res.redirect(`${process.env.REDIRECT_SITE_DEV}/signin`);
     }else{
-        res.redirect('http://localhost:5000/register');
+        res.redirect(`${process.env.REDIRECT_SITE_DEV}/register`);
     }
 })
 
 //Start Reset password
 router.post("/reset", getUserBody, checkVerified, async (req, res) => {
-    const resetToken = jwt.sign(
-        {sub: res.user._id},
-        process.env.RESET_TOKEN,
-        {expiresIn: process.env.RESET_TIME});
-    res.user.resetToken = resetToken;
-    try{
-        const newuser = await res.user.save();
-        sendMail(res.user.mail,
-            `Voidflow - reset your password`,
-            `<h2>${newuser.name}, here's your reset password mail!</h2>
-            <h4>To reset your password, please click <a href="http://localhost:5000/reset?resetToken=${resetToken}">here</a>.</h4>`
-            );
 
-        
-        res.status(201).json({status:true,message:"Reset mail sent."}).send
-    } catch (err) {
-        res.status(500).json({status:false,message:err.message})
-        
+    if(res.user.resetToken != null && res.user.resetToken != ""){
+        jwt.verify(res.user.resetToken, process.env.RESET_TOKEN, (err, data) => {
+            if (err) {
+                if(err.message != 'jwt expired'){
+                    return res.status(403).json({status:false,message:err.message});
+                }
+            } else {
+                res.status(403).json({status:false, message: "We have sent you a reset mail yet."})
+            }
+        })
+    } else {
+        console.log('Creiamo token')
+        const resetToken = jwt.sign(
+            {sub: res.user._id},
+            process.env.RESET_TOKEN,
+            {expiresIn: process.env.RESET_TIME});
+        res.user.resetToken = resetToken;
+        try{
+            const newuser = await res.user.save();
+            sendMail(res.user.mail,
+                `Voidflow - reset your password`,
+                `<h2>${newuser.name}, here's your reset password mail!</h2>
+                <h4>To reset your password, please click <a href="${process.env.REDIRECT_DEV}/reset?resetToken=${resetToken}">here</a>.</h4>`
+                );
+    
+            
+            res.status(201).json({status:true,message:"Reset mail sent."}).send
+        } catch (err) {
+            res.status(500).json({status:false,message:err.message})
+            
+        }
     }
+})
+
+//Verify Reset Token
+router.post("/verifyResetToken", authenticateResetToken, async (req, res) => {
+ 
+    res.sendStatus(200);
+    
 })
 
 //End Reset password
@@ -162,7 +183,7 @@ router.post("/register", validateData, async (req, res) => {
         sendMail(req.body.mail,
             `Voidflow - verify your email`,
             `<h2>${user.name}, thanks for registering to our site!</h2>
-            <h4>To complete your registration, please click <a href="http://${req.headers.host}/verify-email?token=${newuser.mailToken}">here</a>.</h4>`
+            <h4>To complete your registration, please click <a href="${process.env.REDIRECT_API_DEV}/verify-email?token=${newuser.mailToken}">here</a>.</h4>`
             );
             
         newuser.mailToken = "";

@@ -19,15 +19,12 @@ export default class Dashboard extends Component{
             return window.location.href = 'http://localhost:5000/signin';
         });
 
-        /*if(props.loggedInStatus === "NOT_LOGGED_IN"){
-            return  <Redirect  to="/signin" />
-        }*/
         return (
             <>
                 <h1>Status: {this.props.loggedInStatus}</h1>
                 <h2>accessToken: {window.localStorage.getItem('voidFlowAccessToken')}</h2>
                 
-                <h2>refreshToken: {window.localStorage.getItem('voidFlowAccessToken')}</h2>
+                <h2>refreshToken: {window.localStorage.getItem('voidFlowRefreshToken')}</h2>
             </>
         )
     }

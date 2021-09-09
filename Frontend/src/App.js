@@ -6,6 +6,7 @@ import SigninPage from './pages/signin';
 import RegisterPage from './pages/register';
 import DashboardPage from './pages/dashboard';
 import ResetPage from './pages/reset';
+import NotFoundPage from './pages/404notfound'
 
 
 export default class App extends Component {
@@ -70,6 +71,15 @@ export default class App extends Component {
             loggedInStatus={this.state.loggedInStatus}/>
           )}
           />
+
+          <Route path="*"
+          exact
+          render={props => (
+            <NotFoundPage 
+            {...props}/>
+          )}
+          />
+
         </Switch>
       </Router>
     );

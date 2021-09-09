@@ -71,7 +71,7 @@ userSchema.pre('save', async function (next) {
       this.password = hashedPassword;
       next()
     }
-  });
+});
 
 
 module.exports = mongoose.model("User", userSchema)

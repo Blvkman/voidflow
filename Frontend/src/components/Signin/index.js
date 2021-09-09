@@ -72,19 +72,6 @@ export default class SignIn extends Component {
 
     render(){
 
-        /*
-
-        Checking if user is already logged in
-
-        if (this.props.user !== "") {
-            alert("You can't login if you are logged in!");
-            return  <Redirect  to="/" />
-        }
-        */
-
-        //const [mail, setMail] = useState(null);
-        //const [password, setPassword] = useState(null);
-
         return (
             <>
                 <Container>
