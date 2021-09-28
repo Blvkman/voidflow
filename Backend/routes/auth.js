@@ -21,7 +21,7 @@ router.post("/login", getUserBody, async (req, res) => {
             else if(!value) res.sendStatus(403)
             else{
                 const accessToken = jwt.sign(
-                    {sub: res.user._id},
+                    {sub: res.user._id, services: res.user.services},
                     process.env.ACCESS_TOKEN,
                     {expiresIn: process.env.ACCESS_TIME});
 

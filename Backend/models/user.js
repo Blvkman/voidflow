@@ -41,9 +41,9 @@ const userSchema = new mongoose.Schema({
         required: false,
         default: ""
     },
-    active_services: {
-        type: String,
-        required: false
+    services: {
+        vault: {status: {type: Boolean, default: false}, used: {type: Number, default: 0}},
+        study: {type: Boolean, default: false}
     },
     date: {
       type: Date,
